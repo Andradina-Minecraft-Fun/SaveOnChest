@@ -1,0 +1,13 @@
+name: SaveOnChest
+description: Guarda os itens do player em um baú
+
+main: br.com.centralandradina.saveonchest.SaveOnChest
+
+version: ${project.version}
+api-version: 1.21
+
+commands:
+  saveonchest:
+    description: Guarda os itens do player em um baú
+    permission: saveonchest.save
+    aliases: [guardar]
