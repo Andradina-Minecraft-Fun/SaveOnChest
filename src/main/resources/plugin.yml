@@ -4,7 +4,7 @@ description: Guarda os itens do player em um baú
 main: br.com.centralandradina.saveonchest.SaveOnChest
 
 version: ${project.version}
-api-version: 1.21
+api-version: 1.20
 
 commands:
   saveonchest:

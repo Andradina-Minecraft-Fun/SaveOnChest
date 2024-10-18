@@ -6,10 +6,10 @@
 
     <groupId>br.com.centralandradina</groupId>
     <artifactId>SaveOnChest</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
-    <name>PokeEgg</name>
+    <name>SaveOnChest</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.1-R0.1-SNAPSHOT</version>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
