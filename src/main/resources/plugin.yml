@@ -6,6 +6,10 @@ main: br.com.centralandradina.saveonchest.SaveOnChest
 version: ${project.version}
 api-version: 1.20
 
+softdepend:
+  - RedProtect
+  - WorldGuard
+
 commands:
   saveonchest:
     description: Guarda os itens do player em um baú

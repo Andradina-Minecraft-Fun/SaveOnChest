@@ -45,12 +45,18 @@ public class CommandsExecutor implements CommandExecutor
 				// recupera o bloco do player
 				Block blockPlayer = player.getLocation().getBlock();
 
-				// adiciona o bloco à frente do qual o player está olhando
+				// recupera o bloco à frente do qual o player está olhando
 				Block blockFront = blockPlayer.getRelative(player.getFacing());
 
 				// verifica se o bloco à frente está vazio
 				if (blockFront.getType() != Material.AIR) {
 					player.sendMessage(this.plugin.color(this.plugin.getConfig().getString("messages.no-space")));
+					return false;
+				}
+
+				// verifica se o local do primeiro bau é protegido
+				if(!this.plugin.protectionManager.hasAccess(blockFront.getLocation(), player)) {
+					player.sendMessage(this.plugin.color(this.plugin.getConfig().getString("messages.location-no-permitted")));
 					return false;
 				}
 
@@ -74,6 +80,13 @@ public class CommandsExecutor implements CommandExecutor
 					player.sendMessage(this.plugin.color(this.plugin.getConfig().getString("messages.no-space")));
 					return false;
 				}
+
+				// verifica se o local do segundo bau é protegido
+				if(!this.plugin.protectionManager.hasAccess(blockSecondary.getLocation(), player)) {
+					player.sendMessage(this.plugin.color(this.plugin.getConfig().getString("messages.location-no-permitted")));
+					return false;
+				}
+
 
 				// adiciona os baus
 				blockFront.setType(Material.CHEST);

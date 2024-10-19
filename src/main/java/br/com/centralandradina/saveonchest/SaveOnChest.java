@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class SaveOnChest extends JavaPlugin 
 {
+	public ProtectionManager protectionManager;
 
 	/**
 	 * on enable
@@ -29,8 +30,23 @@ public class SaveOnChest extends JavaPlugin
 		config.options().copyDefaults(true);
 		config.addDefault("messages.no-space", "Sem espaço na sua frente para criar o baú duplo");
 		config.addDefault("messages.no-player", "Esse comando só pode ser executado por um player");
-		// config.addDefault("aliases", Arrays.asList("saveonchest", "guardar"));
+		config.addDefault("messages.location-no-permitted", "Você não tem acesso à esse local");
 		saveConfig();
+
+		// create ProtectionManager
+		protectionManager = new ProtectionManager(this);
+
+		// verify if are using RedProtect
+		if (pluginManager.isPluginEnabled("RedProtect")) {
+			this.getLogger().info("RedProtect hooked");
+			protectionManager.pluginRedProtect = true;
+		}
+
+		// verify if are using WorldGuard
+		if (pluginManager.isPluginEnabled("WorldGuard")) {
+			this.getLogger().info("WorldGuard hooked");
+			protectionManager.pluginWorldGuard = true;
+		}
 
 		// commands
 		this.getCommand("saveonchest").setExecutor(new CommandsExecutor(this));
