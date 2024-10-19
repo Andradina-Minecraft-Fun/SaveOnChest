@@ -1,5 +1,8 @@
 package br.com.centralandradina.saveonchest;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -18,6 +21,11 @@ import org.bukkit.inventory.ItemStack;
 public class CommandsExecutor implements CommandExecutor
 {
 	protected SaveOnChest plugin;
+
+	// mapa para armazenar o tempo da última execução do comando por player
+    private HashMap<UUID, Long> lastCommandTime = new HashMap<>();
+    // private final long commandCooldown = 1 * 30000; // 30 segundos em milissegundos
+    private final long commandCooldown = 10 * 60000; // 10 minutos em milissegundos
 
 	/**
 	 * constructor
@@ -41,6 +49,18 @@ public class CommandsExecutor implements CommandExecutor
 			// verifica se é um player
 			if(sender instanceof Player) {
 				Player player = (Player)sender;
+
+				// verifica o tempo que o player executou o comando
+				Long currentTime = System.currentTimeMillis();
+				Long lastTime = lastCommandTime.get(player.getUniqueId());
+				if (lastTime != null && currentTime - lastTime < commandCooldown) {
+					Long remainingTime = commandCooldown - (currentTime - lastTime);
+					
+					String msg = this.plugin.getConfig().getString("messages.wait").replace("{time}", (remainingTime / 1000) + "");
+					player.sendMessage(this.plugin.color(msg));
+					
+					return false;
+				}
 
 				// recupera o bloco do player
 				Block blockPlayer = player.getLocation().getBlock();
@@ -87,6 +107,27 @@ public class CommandsExecutor implements CommandExecutor
 					return false;
 				}
 
+				// recupera o inventario do player
+				Inventory playerInventory = player.getInventory();
+
+				// percorre os itens do inventário do player
+				int itens = 0;
+				for (int slot = 0; slot < playerInventory.getSize(); slot++) {
+
+					// pega o o item no slot atual
+					ItemStack item = playerInventory.getItem(slot);
+
+					// verifica se o slot do player não está vazio
+					if (item != null) {
+						itens++;
+					}
+				}
+
+				// se o player nao tem item algum
+				if(itens == 0) {
+					player.sendMessage(this.plugin.color(this.plugin.getConfig().getString("messages.no-items")));
+					return false;
+				}
 
 				// adiciona os baus
 				blockFront.setType(Material.CHEST);
@@ -119,7 +160,6 @@ public class CommandsExecutor implements CommandExecutor
 				player.openInventory(((Chest)blockFront.getState()).getInventory());
 
 				// recupera os 2 inventarios
-				Inventory playerInventory = player.getInventory();
 				Inventory chestInventory = ((Chest)blockFront.getState()).getInventory();
 
 				// percorre os itens do inventário do player
@@ -135,7 +175,9 @@ public class CommandsExecutor implements CommandExecutor
 						chestInventory.addItem(item);
 					}
 				}
-				
+
+				// atualiza o tempo da última execução do comando
+				lastCommandTime.put(player.getUniqueId(), currentTime);
 			}
 
 			// se nao for um player

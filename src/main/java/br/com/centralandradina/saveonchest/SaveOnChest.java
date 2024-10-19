@@ -31,6 +31,8 @@ public class SaveOnChest extends JavaPlugin
 		config.addDefault("messages.no-space", "Sem espaço na sua frente para criar o baú duplo");
 		config.addDefault("messages.no-player", "Esse comando só pode ser executado por um player");
 		config.addDefault("messages.location-no-permitted", "Você não tem acesso à esse local");
+		config.addDefault("messages.no-items", "Você não tem itens para guardar");
+		config.addDefault("messages.wait", "Você deve esperar mais {time} segundos para usar este comando novamente.");
 		saveConfig();
 
 		// create ProtectionManager
