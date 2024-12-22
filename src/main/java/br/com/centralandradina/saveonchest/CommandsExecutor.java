@@ -176,6 +176,9 @@ public class CommandsExecutor implements CommandExecutor
 					}
 				}
 
+				// salva os dados do player
+				player.saveData();
+
 				// atualiza o tempo da última execução do comando
 				lastCommandTime.put(player.getUniqueId(), currentTime);
 			}
